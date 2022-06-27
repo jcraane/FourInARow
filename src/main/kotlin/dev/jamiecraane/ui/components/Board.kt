@@ -2,6 +2,7 @@ package dev.jamiecraane.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.GridCells
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.jamiecraane.ui.theme.FourInARowTheme
 
@@ -25,6 +27,7 @@ fun Board(
     val numPieces by derivedStateOf { numRows * numColumns }
 //    todo render the board, we might need two layers for background effect
     LazyVerticalGrid(
+        modifier = Modifier.background(Color(0xFF258EFF)),
         cells = GridCells.Fixed(numColumns),
     ) {
         items(numPieces) { index ->

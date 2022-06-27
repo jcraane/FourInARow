@@ -32,7 +32,7 @@ fun App() {
 
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication, state = WindowState(size = DpSize(1000.dp, 800.dp))) {
+    Window(onCloseRequest = ::exitApplication, state = WindowState(size = DpSize(800.dp, 700.dp))) {
         App()
     }
 }
