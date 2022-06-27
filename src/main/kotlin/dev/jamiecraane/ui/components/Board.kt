@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.jamiecraane.ui.theme.FourInARowTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Board(
     modifier: Modifier = Modifier,
@@ -59,5 +58,4 @@ private fun BoardPreview() {
             onClickListener = {},
         )
     }
-
 }
