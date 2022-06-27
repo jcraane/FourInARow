@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class GameBoardTest {
     @Test
     fun putPiece() = runTest() {
-        val board = GameBoard()
+        val board = FourInARow()
 
         launch {
             board.gameStatusFlow.test {

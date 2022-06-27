@@ -3,8 +3,8 @@ package dev.jamiecraane.domain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class GameBoard(private val winnerDecider: WinnerDecider = BruteForceWinnerDecider()) {
-    private val board: Array<IntArray> = Array(HEIGHT) { IntArray(WIDTH) }
+class FourInARow(private val winnerDecider: WinnerDecider = BruteForceWinnerDecider()) {
+    private val board: Array<IntArray> = Array(NUM_ROWS) { IntArray(NUM_COLS) }
     private val _gameStatusFlow = MutableStateFlow<GameStatus?>(null)
 
     /**
@@ -16,7 +16,7 @@ class GameBoard(private val winnerDecider: WinnerDecider = BruteForceWinnerDecid
      * Puts a new piece to the four in a row board.
      *
      * @param piece The piece to play.
-     * @param column 0-based. FOrst column is 0.
+     * @param column 0-based. First column is 0.
      */
     fun put(piece: Piece, column: Int) {
         var rowIndex = BOTTOM_ROW_INDEX // Start at bottom
@@ -34,10 +34,6 @@ class GameBoard(private val winnerDecider: WinnerDecider = BruteForceWinnerDecid
         )
     }
 
-    private fun checkHasWinner(): Piece? {
-        return null
-    }
-
     override fun toString(): String {
         return buildString {
             for (i in board.indices) {
@@ -51,9 +47,9 @@ class GameBoard(private val winnerDecider: WinnerDecider = BruteForceWinnerDecid
     }
 
     companion object {
-        const val HEIGHT = 6
-        const val WIDTH = 7
-        private const val BOTTOM_ROW_INDEX = HEIGHT - 1
+        const val NUM_ROWS = 6
+        const val NUM_COLS = 7
+        private const val BOTTOM_ROW_INDEX = NUM_ROWS - 1
 
         const val EMPTY = 0
     }
