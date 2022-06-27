@@ -3,9 +3,8 @@ package dev.jamiecraane.domain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class GameBoard {
-    val board: Array<IntArray> = Array(HEIGHT) { IntArray(WIDTH) }
-
+class GameBoard(private val winnerDecider: WinnerDecider = BruteForceWinnerDecider()) {
+    private val board: Array<IntArray> = Array(HEIGHT) { IntArray(WIDTH) }
     private val _gameStatusFlow = MutableStateFlow<GameStatus?>(null)
 
     /**
@@ -30,7 +29,7 @@ class GameBoard {
         }
 
         _gameStatusFlow.value = GameStatus(
-            winner = checkHasWinner(),
+            winner = winnerDecider.hasWinner(board),
             playedPiece = PlayedPiece(piece, column, rowIndex),
         )
     }
@@ -52,11 +51,11 @@ class GameBoard {
     }
 
     companion object {
-        private const val HEIGHT = 6
-        private const val WIDTH = 7
+        const val HEIGHT = 6
+        const val WIDTH = 7
         private const val BOTTOM_ROW_INDEX = HEIGHT - 1
 
-        private const val EMPTY = 0
+        const val EMPTY = 0
     }
 }
 
