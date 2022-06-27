@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -26,15 +26,20 @@ fun Board(
 ) {
     val numPieces by derivedStateOf { numRows * numColumns }
 //    todo render the board, we might need two layers for background effect
+    Background(numColumns, numPieces, onClickListener)
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun Background(numColumns: Int, numPieces: Int, onClickListener: (column: Int) -> Unit) {
     LazyVerticalGrid(
-        modifier = Modifier.background(Color(0xFF258EFF)),
+        modifier = Modifier
+            .background(Color(0xFF258EFF), RoundedCornerShape(8.dp)),
         cells = GridCells.Fixed(numColumns),
     ) {
         items(numPieces) { index ->
             // Since we support clicking on any piece, we need to remember the column the piece belongs to to know at which column a new
             // piece should be inserted.
-            val column = index % numColumns
-//            Text(text = column.toString())
             EmptyCell(
                 modifier = Modifier.wrapContentSize().padding(8.dp),
                 column = index % numColumns,
