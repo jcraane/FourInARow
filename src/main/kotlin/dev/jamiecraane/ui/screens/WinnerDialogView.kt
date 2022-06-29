@@ -13,46 +13,37 @@ import androidx.compose.ui.unit.dp
 import dev.jamiecraane.ui.components.core.ActionButton
 import dev.jamiecraane.ui.theme.FourInARowTheme
 import dev.jamiecraane.viewcontroller.MainViewController
-import dev.jamiecraane.viewcontroller.SettingsViewController
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsDialogView(
-    mainViewController: MainViewController,
-    settingsViewController: SettingsViewController,
-) {
-    SettingsDialogContent(onCloseClicked = { mainViewController.closeWinnerDialog() })
+fun WinnerDialogView(mainViewController: MainViewController) {
+    WinnerDialogContent(
+        onCloseClicked = { mainViewController.closeWinnerDialog() }
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SettingsDialogContent(
-    onCloseClicked: () -> Unit,
-) {
+private fun WinnerDialogContent(onCloseClicked: () -> Unit) {
     AlertDialog(
         modifier = Modifier.padding(12.dp),
         onDismissRequest = { onCloseClicked() },
         title = {
-            Text(text = "Settings")
+            Text(text = "We have a winner!")
         },
         buttons = {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                ActionButton(label = "Save", onClick = {
-
-                })
-                ActionButton(label = "Cancel", onClick = {
+                ActionButton(label = "Close", onClick = {
                     onCloseClicked()
                 })
             }
         }
     )
-
 }
 
 @Composable
 @Preview
-private fun SettingsDialogContentPreview() {
+private fun WinnerDialogContentPreview() {
     FourInARowTheme {
-        SettingsDialogContent(onCloseClicked = {})
+        WinnerDialogContent(onCloseClicked = {})
     }
 }

@@ -14,6 +14,7 @@ import dev.jamiecraane.domain.Piece
 import dev.jamiecraane.ui.components.ActionStrip
 import dev.jamiecraane.ui.components.Board
 import dev.jamiecraane.ui.theme.FourInARowTheme
+import dev.jamiecraane.viewcontroller.MainScreenViewModel
 import dev.jamiecraane.viewcontroller.MainViewController
 import dev.jamiecraane.viewcontroller.SettingsViewController
 import dev.jamiecraane.viewcontroller.TimerViewModel
@@ -24,26 +25,26 @@ fun MainView(
     mainViewController: MainViewController,
     settingsViewController: SettingsViewController,
 ) {
-    val gameState by mainViewController.gameBoard.gameStatusFlow.collectAsState(null)
-    val timerState by mainViewController.timerState.collectAsState(TimerViewModel())
-    val showSettings by mainViewController.showSettings.collectAsState(false)
+    val mainScreenState by mainViewController.mainScreenState.collectAsState(MainScreenViewModel())
 
     MainViewContent(
-        winner = gameState?.winner,
-        timerState = timerState,
+        timerState = mainScreenState.timerViewModel,
         onNewGameClicked = { mainViewController.newGame() },
         onSettingsClicked = { mainViewController.onSettingsClicked() },
         onPieceClicked = { column -> mainViewController.playPiece(column) }
     )
 
-    if (showSettings) {
+    if (mainScreenState.showSettings) {
         SettingsDialogView(mainViewController, settingsViewController)
+    }
+
+    if (mainScreenState.showWinner) {
+        WinnerDialogView(mainViewController)
     }
 }
 
 @Composable
 fun MainViewContent(
-    winner: Piece?,
     timerState: TimerViewModel,
     onNewGameClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
@@ -74,6 +75,6 @@ fun MainViewContent(
 @Preview
 private fun MainViewContentPreview() {
     FourInARowTheme {
-        MainViewContent(winner = null, timerState = TimerViewModel(), onNewGameClicked = {}, onSettingsClicked = {}, onPieceClicked = {})
+        MainViewContent(timerState = TimerViewModel(), onNewGameClicked = {}, onSettingsClicked = {}, onPieceClicked = {})
     }
 }

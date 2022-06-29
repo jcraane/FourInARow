@@ -23,23 +23,28 @@ open class MainViewController {
     var gameBoard = FourInARow()
         private set
 
-    // List of pieces that are played until now.
-    private val _playedPieces = MutableStateFlow<List<PieceViewModel>>(emptyList())
-    val playedPieces: Flow<List<PieceViewModel>> = gameBoard.gameStatusFlow.map { gameStatus ->
-        gameStatus?.playedPiece?.let {
-            _playedPieces.value = _playedPieces.value + it.mapToViewModel()
+    private val playedPieces = mutableListOf<PieceViewModel>()
+    private val _showSettings = MutableStateFlow(false)
+    private val _showWinner = MutableStateFlow(false)
+    private val _timerState = MutableStateFlow(TimerViewModel("0s"))
+
+    val mainScreenState: Flow<MainScreenViewModel> = combine(
+        gameBoard.gameStatusFlow, _timerState, _showSettings, _showWinner
+    ) { gameStatus, timerState, showSettings, showWinner ->
+        gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
+            playedPieces.add(playedPiece)
         }
 
-        _playedPieces.value
+        MainScreenViewModel(
+            playedPieces,
+            timerState,
+            showSettings,
+            showWinner
+        )
     }
 
-    private val _timerState = MutableStateFlow(TimerViewModel("0s"))
-    val timerState: Flow<TimerViewModel> = _timerState
     private var started = false
     private var elapsedSeconds = 0
-
-    private val _showSettings = MutableStateFlow(false)
-    val showSettings: Flow<Boolean> = _showSettings
 
     // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
     private var whoIsNext: Piece = Piece.RED
@@ -60,7 +65,6 @@ open class MainViewController {
      */
     fun newGame(whoStarts: Piece = Piece.RED) {
         this.gameBoard = FourInARow()
-        _playedPieces.value = emptyList()
         whoIsNext = whoStarts
         started = true
         startTimer()
@@ -89,7 +93,7 @@ open class MainViewController {
         _showSettings.value = true
     }
 
-    fun closeSettings() {
+    fun closeWinnerDialog() {
         _showSettings.value = false
     }
 }
