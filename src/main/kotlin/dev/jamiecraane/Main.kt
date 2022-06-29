@@ -14,6 +14,7 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.ui.components.Board
+import dev.jamiecraane.ui.screens.MainView
 import dev.jamiecraane.ui.theme.FourInARowTheme
 import dev.jamiecraane.util.MainViewController
 
@@ -24,26 +25,9 @@ fun App() {
     val mainViewController = MainViewController().apply {
         init(scope)
     }
-    val gameState by mainViewController.gameBoard.gameStatusFlow.collectAsState(null)
 
     FourInARowTheme {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row() {
-                Text(text = "Winner: ")
-                gameState?.winner?.let {
-                    Text(text = it.name)
-                }
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Board(
-                numColumns = FourInARow.NUM_COLS,
-                numRows = FourInARow.NUM_ROWS,
-                onClickListener = {column ->
-                    println("Add new piece at column $column")
-                },
-                playedPieces = emptyList(),
-            )
-        }
+        MainView(mainViewController)
     }
 }
 

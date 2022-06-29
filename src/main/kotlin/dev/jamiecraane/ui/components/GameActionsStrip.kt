@@ -1,9 +1,7 @@
 package dev.jamiecraane.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,15 +12,23 @@ import dev.jamiecraane.ui.theme.FourInARowTheme
 @Composable
 fun GameActionsStrip(
     onNewGameClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.width(160.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.width(160.dp).padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ActionButton(
+            modifier = Modifier.fillMaxWidth(),
             label = "New Game",
             onClick = onNewGameClicked,
+        )
+
+        ActionButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = "Settings",
+            onClick = onSettingsClicked,
         )
     }
 }
@@ -31,7 +37,7 @@ fun GameActionsStrip(
 @Preview
 private fun GameActionsStripPreview() {
     FourInARowTheme {
-        GameActionsStrip(onNewGameClicked = {})
+        GameActionsStrip(onNewGameClicked = {}, onSettingsClicked = {})
     }
 }
 

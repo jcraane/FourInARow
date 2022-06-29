@@ -36,6 +36,7 @@ fun ActionButton(
     )
 
     Button(
+        modifier = modifier,
         colors = colors,
         shape = RoundedCornerShape(12.dp),
         onClick = onClick
