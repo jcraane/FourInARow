@@ -15,16 +15,16 @@ import androidx.compose.ui.window.application
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.ui.components.Board
 import dev.jamiecraane.ui.theme.FourInARowTheme
-import dev.jamiecraane.util.ViewModel
+import dev.jamiecraane.util.MainViewController
 
 @Composable
 @Preview
 fun App() {
     val scope = rememberCoroutineScope()
-    val viewModel = ViewModel().apply {
+    val mainViewController = MainViewController().apply {
         init(scope)
     }
-    val gameState by viewModel.gameBoard.gameStatusFlow.collectAsState(null)
+    val gameState by mainViewController.gameBoard.gameStatusFlow.collectAsState(null)
 
     FourInARowTheme {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -40,7 +40,8 @@ fun App() {
                 numRows = FourInARow.NUM_ROWS,
                 onClickListener = {column ->
                     println("Add new piece at column $column")
-                }
+                },
+                playedPieces = emptyList(),
             )
         }
     }

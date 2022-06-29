@@ -3,6 +3,12 @@ package dev.jamiecraane.domain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
+/**
+ * Implements the game logic of 4 in a row.
+ *
+ * @param winnerDecider Class which implements the logic to decide who is the winner. Implemented as separate class so it is
+ * easy testable and can be replaced with other, more efficient implementations later on.
+ */
 class FourInARow(private val winnerDecider: WinnerDecider = BruteForceWinnerDecider()) {
     private val board: Array<IntArray> = Array(NUM_ROWS) { IntArray(NUM_COLS) }
     private val _gameStatusFlow = MutableStateFlow<GameStatus?>(null)
@@ -55,15 +61,26 @@ class FourInARow(private val winnerDecider: WinnerDecider = BruteForceWinnerDeci
     }
 }
 
+/**
+ * Represents the pieces that can be played.
+ */
 enum class Piece(val code: Int) {
-    YELLOW(1), RED(2);
+    YELLOW(1) {
+        override fun next() = RED
+    },
+    RED(2) {
+        override fun next() = YELLOW
+    };
+
+    abstract fun next(): Piece
 }
 
 /**
  * Holds the current game status.
  *
  * @property winner If there is a winner, this indicates which piece has won.
- * @property playedPiece The last played piece. @see [PlayedPiece]
+ * @property playedPiece The last played piece. @see [PlayedPiece]. The playedPiece is set on the GameStatus because we only
+ * know the row the piece has settled after the piece is played.
  */
 data class GameStatus(val winner: Piece?, val playedPiece: PlayedPiece)
 

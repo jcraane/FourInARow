@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import dev.jamiecraane.ui.theme.FourInARowTheme
 
 @Composable
-fun EmptyCell(
+fun TransparentCell(
     modifier: Modifier = Modifier,
     column: Int,
     onClickListener: (column: Int) -> Unit,
@@ -34,7 +34,15 @@ fun EmptyCell(
                     onClickListener(column)
                 },
             )
-            .background(Color(0xFFCBCBCB), RoundedCornerShape(33.dp))
+            .background(Color.Transparent, RoundedCornerShape(33.dp))
     ) {
+    }
+}
+
+@Composable
+@Preview
+private fun PiecePreview() {
+    FourInARowTheme {
+        EmptyCell(column = 0, onClickListener = {},)
     }
 }
