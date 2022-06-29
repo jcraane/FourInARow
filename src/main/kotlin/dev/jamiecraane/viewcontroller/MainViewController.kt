@@ -24,12 +24,12 @@ open class MainViewController {
         private set
 
     private val playedPieces = mutableListOf<PieceViewModel>()
-    private val _showSettings = MutableStateFlow(false)
-    private val _showWinner = MutableStateFlow(false)
-    private val _timerState = MutableStateFlow(TimerViewModel("0s"))
+    private val showSettings = MutableStateFlow(false)
+    private val showWinner = MutableStateFlow(false)
+    private val timerState = MutableStateFlow(TimerViewModel("0s"))
 
     val mainScreenState: Flow<MainScreenViewModel> = combine(
-        gameBoard.gameStatusFlow, _timerState, _showSettings, _showWinner
+        gameBoard.gameStatusFlow, timerState, showSettings, showWinner
     ) { gameStatus, timerState, showSettings, showWinner ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
             playedPieces.add(playedPiece)
@@ -73,13 +73,13 @@ open class MainViewController {
     @OptIn(ExperimentalTime::class)
     private fun startTimer() {
         elapsedSeconds = 0
-        _timerState.value = TimerViewModel()
+        timerState.value = TimerViewModel()
 
         viewModelScope.launch {
             while (started && isActive) {
                 delay(1.seconds)
                 elapsedSeconds++
-                _timerState.value = TimerViewModel("${elapsedSeconds}s")
+                timerState.value = TimerViewModel("${elapsedSeconds}s")
             }
         }
     }
@@ -90,10 +90,10 @@ open class MainViewController {
     }
 
     fun onSettingsClicked() {
-        _showSettings.value = true
+        showSettings.value = true
     }
 
     fun closeWinnerDialog() {
-        _showSettings.value = false
+        showSettings.value = false
     }
 }
