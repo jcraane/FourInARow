@@ -14,10 +14,7 @@ import dev.jamiecraane.domain.Piece
 import dev.jamiecraane.ui.components.ActionStrip
 import dev.jamiecraane.ui.components.Board
 import dev.jamiecraane.ui.theme.FourInARowTheme
-import dev.jamiecraane.viewcontroller.MainScreenViewModel
-import dev.jamiecraane.viewcontroller.MainViewController
-import dev.jamiecraane.viewcontroller.SettingsViewController
-import dev.jamiecraane.viewcontroller.TimerViewModel
+import dev.jamiecraane.viewcontroller.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -31,7 +28,8 @@ fun MainView(
         timerState = mainScreenState.timerViewModel,
         onNewGameClicked = { mainViewController.newGame() },
         onSettingsClicked = { mainViewController.onSettingsClicked() },
-        onPieceClicked = { column -> mainViewController.playPiece(column) }
+        onPieceClicked = { column -> mainViewController.playPiece(column) },
+        playedPieces = mainScreenState.playedPieces,
     )
 
     if (mainScreenState.showSettings) {
@@ -46,6 +44,7 @@ fun MainView(
 @Composable
 fun MainViewContent(
     timerState: TimerViewModel,
+    playedPieces: List<PieceViewModel>,
     onNewGameClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
     onPieceClicked: (column: Int) -> Unit,
@@ -65,7 +64,7 @@ fun MainViewContent(
                 numColumns = FourInARow.NUM_COLS,
                 numRows = FourInARow.NUM_ROWS,
                 onClickListener = { column -> onPieceClicked(column) },
-                playedPieces = emptyList(),
+                playedPieces = playedPieces,
             )
         }
     }
@@ -75,6 +74,12 @@ fun MainViewContent(
 @Preview
 private fun MainViewContentPreview() {
     FourInARowTheme {
-        MainViewContent(timerState = TimerViewModel(), onNewGameClicked = {}, onSettingsClicked = {}, onPieceClicked = {})
+        MainViewContent(
+            timerState = TimerViewModel(),
+            playedPieces = emptyList(),
+            onNewGameClicked = {},
+            onSettingsClicked = {},
+            onPieceClicked = {},
+        )
     }
 }
