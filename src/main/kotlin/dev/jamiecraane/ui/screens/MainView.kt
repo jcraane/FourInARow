@@ -2,6 +2,7 @@ package dev.jamiecraane.ui.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,16 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.domain.Piece
-import dev.jamiecraane.ui.components.Board
 import dev.jamiecraane.ui.components.ActionStrip
+import dev.jamiecraane.ui.components.Board
 import dev.jamiecraane.ui.theme.FourInARowTheme
 import dev.jamiecraane.viewcontroller.MainViewController
+import dev.jamiecraane.viewcontroller.SettingsViewController
 import dev.jamiecraane.viewcontroller.TimerViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainView(mainViewController: MainViewController) {
+fun MainView(
+    mainViewController: MainViewController,
+    settingsViewController: SettingsViewController,
+) {
     val gameState by mainViewController.gameBoard.gameStatusFlow.collectAsState(null)
     val timerState by mainViewController.timerState.collectAsState(TimerViewModel())
+    val showSettings by mainViewController.showSettings.collectAsState(false)
 
     MainViewContent(
         winner = gameState?.winner,
@@ -28,6 +35,10 @@ fun MainView(mainViewController: MainViewController) {
         onSettingsClicked = { mainViewController.onSettingsClicked() },
         onPieceClicked = { column -> mainViewController.playPiece(column) }
     )
+
+    if (showSettings) {
+        SettingsDialogView(mainViewController, settingsViewController)
+    }
 }
 
 @Composable

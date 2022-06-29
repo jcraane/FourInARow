@@ -38,10 +38,13 @@ open class MainViewController {
     private var started = false
     private var elapsedSeconds = 0
 
+    private val _showSettings = MutableStateFlow(false)
+    val showSettings: Flow<Boolean> = _showSettings
+
     // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
     private var whoIsNext: Piece = Piece.RED
 
-    open fun init(viewModelScope: CoroutineScope) {
+    fun init(viewModelScope: CoroutineScope) {
         this.viewModelScope = viewModelScope
     }
 
@@ -75,15 +78,18 @@ open class MainViewController {
                 _timerState.value = TimerViewModel("${elapsedSeconds}s")
             }
         }
-
-
     }
+
     fun playPiece(column: Int) {
         gameBoard.put(whoIsNext, column)
         whoIsNext = whoIsNext.next()
     }
 
     fun onSettingsClicked() {
-//        todo open settings screen
+        _showSettings.value = true
+    }
+
+    fun closeSettings() {
+        _showSettings.value = false
     }
 }

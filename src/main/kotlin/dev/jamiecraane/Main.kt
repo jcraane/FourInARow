@@ -10,6 +10,7 @@ import androidx.compose.ui.window.application
 import dev.jamiecraane.ui.screens.MainView
 import dev.jamiecraane.ui.theme.FourInARowTheme
 import dev.jamiecraane.viewcontroller.MainViewController
+import dev.jamiecraane.viewcontroller.SettingsViewController
 
 @Composable
 @Preview
@@ -18,9 +19,12 @@ fun App() {
     val mainViewController = MainViewController().apply {
         init(scope)
     }
+    val settingsViewController = SettingsViewController().apply {
+        init(scope)
+    }
 
     FourInARowTheme {
-        MainView(mainViewController)
+        MainView(mainViewController, settingsViewController)
     }
 }
 
