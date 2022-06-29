@@ -59,13 +59,15 @@ open class MainViewController {
         this.gameBoard = FourInARow()
         _playedPieces.value = emptyList()
         whoIsNext = whoStarts
-        _timerState.value = TimerViewModel()
         started = true
         startTimer()
     }
 
     @OptIn(ExperimentalTime::class)
     private fun startTimer() {
+        elapsedSeconds = 0
+        _timerState.value = TimerViewModel()
+
         viewModelScope.launch {
             while (started && isActive) {
                 delay(1.seconds)
