@@ -10,7 +10,7 @@ import dev.jamiecraane.ui.components.core.ActionButton
 import dev.jamiecraane.ui.theme.FourInARowTheme
 
 @Composable
-fun GameActionsStrip(
+fun ActionStrip(
     onNewGameClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
 ) {
@@ -37,7 +37,7 @@ fun GameActionsStrip(
 @Preview
 private fun GameActionsStripPreview() {
     FourInARowTheme {
-        GameActionsStrip(onNewGameClicked = {}, onSettingsClicked = {})
+        ActionStrip(onNewGameClicked = {}, onSettingsClicked = {})
     }
 }
 

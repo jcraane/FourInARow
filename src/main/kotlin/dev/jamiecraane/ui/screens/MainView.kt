@@ -2,6 +2,7 @@ package dev.jamiecraane.ui.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,48 +11,48 @@ import androidx.compose.ui.unit.dp
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.domain.Piece
 import dev.jamiecraane.ui.components.Board
-import dev.jamiecraane.ui.components.GameActionsStrip
+import dev.jamiecraane.ui.components.ActionStrip
 import dev.jamiecraane.ui.theme.FourInARowTheme
-import dev.jamiecraane.util.MainViewController
+import dev.jamiecraane.viewcontroller.MainViewController
+import dev.jamiecraane.viewcontroller.TimerViewModel
 
 @Composable
 fun MainView(mainViewController: MainViewController) {
     val gameState by mainViewController.gameBoard.gameStatusFlow.collectAsState(null)
+    val timerState by mainViewController.timerState.collectAsState(TimerViewModel())
 
     MainViewContent(
         winner = gameState?.winner,
+        timerState = timerState,
         onNewGameClicked = { mainViewController.newGame() },
-        onSettingsClicked = {}
+        onSettingsClicked = { mainViewController.onSettingsClicked() },
+        onPieceClicked = { column -> mainViewController.playPiece(column) }
     )
 }
 
 @Composable
 fun MainViewContent(
     winner: Piece?,
+    timerState: TimerViewModel,
     onNewGameClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
+    onPieceClicked: (column: Int) -> Unit,
 ) {
     Row() {
-        GameActionsStrip(
+        ActionStrip(
             onNewGameClicked = onNewGameClicked,
             onSettingsClicked = onSettingsClicked,
         )
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row() {
-//                todo should contains time. Winner should be showed in popup panel.
-                /*Text(text = "Winner: ")
-                winner?.let {
-                    Text(text = it.name)
-                }*/
+                Text(text = "Elapsed: ${timerState.elapsed}")
             }
             Spacer(modifier = Modifier.height(12.dp))
             Board(
                 numColumns = FourInARow.NUM_COLS,
                 numRows = FourInARow.NUM_ROWS,
-                onClickListener = { column ->
-                    println("Add new piece at column $column")
-                },
+                onClickListener = { column -> onPieceClicked(column) },
                 playedPieces = emptyList(),
             )
         }
@@ -62,6 +63,6 @@ fun MainViewContent(
 @Preview
 private fun MainViewContentPreview() {
     FourInARowTheme {
-        MainViewContent(winner = null, onNewGameClicked = {}, onSettingsClicked = {})
+        MainViewContent(winner = null, timerState = TimerViewModel(), onNewGameClicked = {}, onSettingsClicked = {}, onPieceClicked = {})
     }
 }

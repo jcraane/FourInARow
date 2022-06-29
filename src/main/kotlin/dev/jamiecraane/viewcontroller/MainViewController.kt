@@ -1,12 +1,16 @@
-package dev.jamiecraane.util
+package dev.jamiecraane.viewcontroller
 
 import androidx.compose.ui.graphics.Color
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.domain.Piece
-import dev.jamiecraane.domain.PieceViewModel
 import dev.jamiecraane.domain.PlayedPiece
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 /**
  * View controller who handles interaction between the four in a row views and the game logic itself.
@@ -29,6 +33,11 @@ open class MainViewController {
         _playedPieces.value
     }
 
+    private val _timerState = MutableStateFlow(TimerViewModel("0s"))
+    val timerState: Flow<TimerViewModel> = _timerState
+    private var started = false
+    private var elapsedSeconds = 0
+
     // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
     private var whoIsNext: Piece = Piece.RED
 
@@ -50,11 +59,29 @@ open class MainViewController {
         this.gameBoard = FourInARow()
         _playedPieces.value = emptyList()
         whoIsNext = whoStarts
+        _timerState.value = TimerViewModel()
+        started = true
+        startTimer()
     }
 
+    @OptIn(ExperimentalTime::class)
+    private fun startTimer() {
+        viewModelScope.launch {
+            while (started && isActive) {
+                delay(1.seconds)
+                elapsedSeconds++
+                _timerState.value = TimerViewModel("${elapsedSeconds}s")
+            }
+        }
+
+
+    }
     fun playPiece(column: Int) {
         gameBoard.put(whoIsNext, column)
         whoIsNext = whoIsNext.next()
     }
 
+    fun onSettingsClicked() {
+//        todo open settings screen
+    }
 }

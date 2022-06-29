@@ -1,4 +1,4 @@
-package dev.jamiecraane.domain
+package dev.jamiecraane.viewcontroller
 
 import androidx.compose.ui.graphics.Color
 
