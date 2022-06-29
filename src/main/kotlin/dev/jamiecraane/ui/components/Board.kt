@@ -4,6 +4,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.GridCells
@@ -28,7 +29,7 @@ fun Board(
     playedPieces: List<PieceViewModel>,
     onClickListener: (column: Int) -> Unit,
 ) {
-    Box() {
+    BoxWithConstraints {
         val numPieces by derivedStateOf { numRows * numColumns }
 //    todo render the board, we might need two layers for background effect
 //        todo or use a canvas and draw ourselves
@@ -57,7 +58,7 @@ fun Board(
             }*/
         }
 
-//        Background(numColumns, numPieces, onClickListener)
+        Background(numColumns, numPieces, onClickListener)
 
     }
 }
