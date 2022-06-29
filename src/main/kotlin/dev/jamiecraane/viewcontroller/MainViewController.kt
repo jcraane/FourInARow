@@ -23,7 +23,7 @@ open class MainViewController {
     var gameBoard = FourInARow()
         private set
 
-    private val playedPieces = mutableListOf<PieceViewModel>()
+    private val playedPieces = mutableSetOf<PieceViewModel>()
     private val showSettings = MutableStateFlow(false)
     private val showWinner = MutableStateFlow(false)
     private val timerState = MutableStateFlow(TimerViewModel("0s"))
@@ -36,7 +36,7 @@ open class MainViewController {
         }
 
         MainScreenViewModel(
-            playedPieces,
+            playedPieces.toList(),
             timerState,
             showSettings,
             showWinner

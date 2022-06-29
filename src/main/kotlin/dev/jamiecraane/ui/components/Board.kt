@@ -28,10 +28,14 @@ fun Board(
     playedPieces: List<PieceViewModel>,
     onClickListener: (column: Int) -> Unit,
 ) {
+    println("pieces = $playedPieces")
+
     BoxWithConstraints {
         val numPieces by derivedStateOf { numRows * numColumns }
 //    todo render the board, we might need two layers for background effect
 //        todo or use a canvas and draw ourselves
+
+        Background(numColumns, numPieces, onClickListener)
 
         LazyVerticalGrid(
             modifier = Modifier
@@ -56,9 +60,6 @@ fun Board(
                 )
             }*/
         }
-
-        Background(numColumns, numPieces, onClickListener)
-
     }
 }
 
