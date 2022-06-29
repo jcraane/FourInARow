@@ -17,8 +17,7 @@ import kotlin.time.ExperimentalTime
 open class MainViewController {
     private lateinit var viewModelScope: CoroutineScope
 
-    var gameBoard = FourInARow()
-        private set
+    private val gameBoard = FourInARow()
 
     private val playedPieces = mutableSetOf<PieceViewModel>()
     private val showSettings = MutableStateFlow(false)
@@ -29,6 +28,7 @@ open class MainViewController {
         gameBoard.gameStatusFlow, timerState, showSettings, showWinner
     ) { gameStatus, timerState, showSettings, showWinner ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
+            println("Add played piece = $playedPiece")
             playedPieces.add(playedPiece)
         }
 
@@ -63,7 +63,9 @@ open class MainViewController {
      * @param whoStarts The color of the piece who starts the game.
      */
     fun newGame(whoStarts: Piece = Piece.RED) {
-        this.gameBoard = FourInARow()
+        timerJob?.cancel()
+        this.gameBoard.newGame()
+        playedPieces.clear()
         whoIsNext = whoStarts
         startTimer()
     }

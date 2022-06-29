@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
  * easy testable and can be replaced with other, more efficient implementations later on.
  */
 class FourInARow(private val winnerDecider: WinnerDecider = BruteForceWinnerDecider()) {
-    private val board: Array<IntArray> = Array(NUM_ROWS) { IntArray(NUM_COLS) }
+    private var board: Array<IntArray> = Array(NUM_ROWS) { IntArray(NUM_COLS) }
     private val _gameStatusFlow = MutableStateFlow<GameStatus?>(null)
 
     /**
@@ -38,6 +38,11 @@ class FourInARow(private val winnerDecider: WinnerDecider = BruteForceWinnerDeci
             winner = winnerDecider.hasWinner(board),
             playedPiece = PlayedPiece(piece, column, rowIndex),
         )
+    }
+
+    fun newGame() {
+        _gameStatusFlow.value = null
+        board = Array(NUM_ROWS) { IntArray(NUM_COLS) }
     }
 
     override fun toString(): String {
