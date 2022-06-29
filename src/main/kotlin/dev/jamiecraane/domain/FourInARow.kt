@@ -78,6 +78,10 @@ enum class Piece(val code: Int) {
     };
 
     abstract fun next(): Piece
+
+    companion object {
+        fun fromCode(code: Int) = values().first { it.code == code }
+    }
 }
 
 /**

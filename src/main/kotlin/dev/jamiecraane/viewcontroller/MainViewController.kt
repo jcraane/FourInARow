@@ -21,12 +21,11 @@ open class MainViewController {
 
     private val playedPieces = mutableSetOf<PieceViewModel>()
     private val showSettings = MutableStateFlow(false)
-    private val showWinner = MutableStateFlow(false)
     private val timerState = MutableStateFlow(TimerViewModel("0s"))
 
     val mainScreenState: Flow<MainScreenViewModel> = combine(
-        gameBoard.gameStatusFlow, timerState, showSettings, showWinner
-    ) { gameStatus, timerState, showSettings, showWinner ->
+        gameBoard.gameStatusFlow, timerState, showSettings
+    ) { gameStatus, timerState, showSettings ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
             println("Add played piece = $playedPiece")
             playedPieces.add(playedPiece)
@@ -37,7 +36,7 @@ open class MainViewController {
             playedPieces.toList(),
             timerState,
             showSettings,
-            showWinner
+            gameStatus?.winner != null,
         )
     }
 
@@ -63,19 +62,24 @@ open class MainViewController {
      * @param whoStarts The color of the piece who starts the game.
      */
     fun newGame(whoStarts: Piece = Piece.RED) {
-        timerJob?.cancel()
+        resetTimer()
         this.gameBoard.newGame()
         playedPieces.clear()
         whoIsNext = whoStarts
         startTimer()
     }
 
+    fun reset(whoStarts: Piece = Piece.RED) {
+        resetTimer()
+        this.gameBoard.newGame()
+        playedPieces.clear()
+        whoIsNext = whoStarts
+    }
+
     @OptIn(ExperimentalTime::class)
     private fun startTimer() {
-        timerJob?.cancel()
+        resetTimer()
         started = true
-        elapsedSeconds = 0
-        timerState.value = TimerViewModel()
 
         timerJob = viewModelScope.launch {
             while (started && isActive) {
@@ -84,6 +88,13 @@ open class MainViewController {
                 timerState.value = TimerViewModel("${elapsedSeconds}s")
             }
         }
+    }
+
+    private fun resetTimer() {
+        timerJob?.cancel()
+        started = false
+        elapsedSeconds = 0
+        timerState.value = TimerViewModel()
     }
 
     fun playPiece(column: Int) {

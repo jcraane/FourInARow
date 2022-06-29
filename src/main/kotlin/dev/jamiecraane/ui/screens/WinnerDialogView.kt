@@ -17,7 +17,9 @@ import dev.jamiecraane.viewcontroller.MainViewController
 @Composable
 fun WinnerDialogView(mainViewController: MainViewController) {
     WinnerDialogContent(
-        onCloseClicked = { mainViewController.closeWinnerDialog() }
+        onCloseClicked = {
+            mainViewController.reset()
+        }
     )
 }
 

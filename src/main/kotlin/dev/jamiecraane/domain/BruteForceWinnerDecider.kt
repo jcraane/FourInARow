@@ -6,43 +6,38 @@ package dev.jamiecraane.domain
  */
 class BruteForceWinnerDecider : WinnerDecider {
     override fun hasWinner(board: Array<IntArray>): Piece? {
-        val regex = createMatchWinnerRegex()
+        val matchStrings = createWinnerMatchStrings()
 
-        val winnerHorizontal = checkWinnerHorizontal(board, regex)
+        val winnerHorizontal = checkWinnerHorizontal(board, matchStrings)
         if (winnerHorizontal != null) {
             return winnerHorizontal
         }
 
-        val winnerVertical = checkWinnerVertical(board, regex)
+        val winnerVertical = checkWinnerVertical(board, matchStrings)
         if (winnerVertical != null) {
             return winnerVertical
         }
 
-        return checkDiagonals(board, regex)
+        return checkDiagonals(board, matchStrings)
     }
 
-    private fun createMatchWinnerRegex(): Regex {
-        val valuesToMatch = Piece.values().map { it.code }
-        val regex = buildString {
-            append("(")
-            valuesToMatch.forEach { code ->
-                append("($code){$NUMBER_OF_CONSECUTIVE_REQUIRED}")
-                append("|")
+    private fun createWinnerMatchStrings(): List<String> =
+        Piece.values().map { piece ->
+            buildString {
+                repeat(NUMBER_OF_CONSECUTIVE_REQUIRED) {
+                    append(piece.code.toString())
+                }
             }
-            removeRange(this.length - 1, this.length)
-            append(")")
-        }.toRegex()
-        return regex
-    }
+        }
 
-    private fun checkWinnerHorizontal(board: Array<IntArray>, regex: Regex): Piece? {
+    private fun checkWinnerHorizontal(board: Array<IntArray>, matchStrings: List<String>): Piece? {
         for (col in board.indices) {
             val horizontal = StringBuilder()
             for (row in board[col].indices) {
                 horizontal.append(board[col][row])
             }
 
-            val winner = checkWinner(horizontal.toString(), regex)
+            val winner = checkWinner(horizontal.toString(), matchStrings)
             if (winner != null) {
                 return winner
             }
@@ -51,14 +46,14 @@ class BruteForceWinnerDecider : WinnerDecider {
         return null
     }
 
-    private fun checkWinnerVertical(board: Array<IntArray>, regex: Regex): Piece? {
+    private fun checkWinnerVertical(board: Array<IntArray>, matchStrings: List<String>): Piece? {
         for (row in board[0].indices) {
             val vertical = StringBuilder()
             for (col in board.indices) {
                 vertical.append(board[col][row])
             }
 
-            val winner = checkWinner(vertical.toString(), regex)
+            val winner = checkWinner(vertical.toString(), matchStrings)
             if (winner != null) {
                 return winner
             }
@@ -67,14 +62,14 @@ class BruteForceWinnerDecider : WinnerDecider {
         return null
     }
 
-    private fun checkDiagonals(board: Array<IntArray>, regex: Regex): Piece? {
-        val winnerDiagonalTopLeft = checkDiagonal(board, regex)
+    private fun checkDiagonals(board: Array<IntArray>, matchStrings: List<String>): Piece? {
+        val winnerDiagonalTopLeft = checkDiagonal(board, matchStrings)
         if (winnerDiagonalTopLeft != null) {
             return winnerDiagonalTopLeft
         }
 
         val boardReversed = reverseRowsInBoard(board)
-        return checkDiagonal(boardReversed, regex)
+        return checkDiagonal(boardReversed, matchStrings)
     }
 
     private fun reverseRowsInBoard(board: Array<IntArray>): Array<IntArray> {
@@ -90,7 +85,7 @@ class BruteForceWinnerDecider : WinnerDecider {
         return boardWithReversedColumns
     }
 
-    private fun checkDiagonal(board: Array<IntArray>, regex: Regex): Piece? {
+    private fun checkDiagonal(board: Array<IntArray>, matchStrings: List<String>): Piece? {
         val numCols = board[0].size
         val numRows = board.size
         val numDiagonals = numCols + numRows - 1
@@ -109,15 +104,14 @@ class BruteForceWinnerDecider : WinnerDecider {
         return diagonals
             .filter { it.size >= NUMBER_OF_CONSECUTIVE_REQUIRED }
             .map { it.joinToString("") }
-            .firstNotNullOfOrNull { checkWinner(it, regex) }
+            .firstNotNullOfOrNull { checkWinner(it, matchStrings) }
     }
 
-    private fun checkWinner(value: String, regex: Regex): Piece? {
-        return regex.find(value)?.let { matchResult ->
-            Piece.values().firstOrNull { piece ->
-                matchResult.value.contains(piece.code.toString())
+    private fun checkWinner(value: String, matchStrings: List<String>): Piece? {
+        return matchStrings.find { value.contains(it) }
+            ?.let { found ->
+                Piece.fromCode(found.first().toString().toInt())
             }
-        }
     }
 
     companion object {
