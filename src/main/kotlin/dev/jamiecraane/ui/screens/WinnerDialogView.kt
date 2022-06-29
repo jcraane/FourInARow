@@ -2,6 +2,7 @@ package dev.jamiecraane.ui.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
@@ -13,10 +14,15 @@ import androidx.compose.ui.unit.dp
 import dev.jamiecraane.ui.components.core.ActionButton
 import dev.jamiecraane.ui.theme.FourInARowTheme
 import dev.jamiecraane.viewcontroller.MainViewController
+import dev.jamiecraane.viewcontroller.WinnerViewModel
 
 @Composable
-fun WinnerDialogView(mainViewController: MainViewController) {
+fun WinnerDialogView(
+    winner: WinnerViewModel,
+    mainViewController: MainViewController,
+) {
     WinnerDialogContent(
+        winner = winner,
         onCloseClicked = {
             mainViewController.reset()
         }
@@ -25,12 +31,18 @@ fun WinnerDialogView(mainViewController: MainViewController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun WinnerDialogContent(onCloseClicked: () -> Unit) {
+private fun WinnerDialogContent(
+    winner: WinnerViewModel,
+    onCloseClicked: () -> Unit,
+) {
     AlertDialog(
         modifier = Modifier.padding(12.dp),
         onDismissRequest = { onCloseClicked() },
         title = {
-            Text(text = "We have a winner!")
+            Column {
+                Text(text = "We have a winner!")
+                Text(text = winner.name)
+            }
         },
         buttons = {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -46,6 +58,6 @@ private fun WinnerDialogContent(onCloseClicked: () -> Unit) {
 @Preview
 private fun WinnerDialogContentPreview() {
     FourInARowTheme {
-        WinnerDialogContent(onCloseClicked = {})
+        WinnerDialogContent(winner = WinnerViewModel(name = "Jan"), onCloseClicked = {})
     }
 }

@@ -27,16 +27,14 @@ open class MainViewController {
         gameBoard.gameStatusFlow, timerState, showSettings
     ) { gameStatus, timerState, showSettings ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
-            println("Add played piece = $playedPiece")
             playedPieces.add(playedPiece)
         }
 
-        println("WINNER = ${gameStatus?.winner}")
         MainScreenViewModel(
             playedPieces.toList(),
             timerState,
             showSettings,
-            gameStatus?.winner != null,
+            winner = if (gameStatus?.winner != null) WinnerViewModel(name = gameStatus.winner.name) else null,
         )
     }
 

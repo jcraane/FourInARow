@@ -36,8 +36,8 @@ fun MainView(
         SettingsDialogView(mainViewController, settingsViewController)
     }
 
-    if (mainScreenState.showWinner) {
-        WinnerDialogView(mainViewController)
+    mainScreenState.winner?.let {
+        WinnerDialogView(it, mainViewController)
     }
 }
 
