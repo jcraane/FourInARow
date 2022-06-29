@@ -4,11 +4,8 @@ import androidx.compose.ui.graphics.Color
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.domain.Piece
 import dev.jamiecraane.domain.PlayedPiece
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
@@ -35,6 +32,7 @@ open class MainViewController {
             playedPieces.add(playedPiece)
         }
 
+        println("WINNER = ${gameStatus?.winner}")
         MainScreenViewModel(
             playedPieces.toList(),
             timerState,
@@ -45,6 +43,7 @@ open class MainViewController {
 
     private var started = false
     private var elapsedSeconds = 0
+    private var timerJob: Job? = null
 
     // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
     private var whoIsNext: Piece = Piece.RED
@@ -54,8 +53,8 @@ open class MainViewController {
     }
 
     private fun PlayedPiece.mapToViewModel(): PieceViewModel = when (this.piece) {
-        Piece.YELLOW -> PieceViewModel(color = Color.Red, column, row)
-        Piece.RED -> PieceViewModel(color = Color.Yellow, column, row)
+        Piece.YELLOW -> PieceViewModel(color = Color.Yellow, column, row)
+        Piece.RED -> PieceViewModel(color = Color.Red, column, row)
     }
 
     /**
@@ -66,16 +65,17 @@ open class MainViewController {
     fun newGame(whoStarts: Piece = Piece.RED) {
         this.gameBoard = FourInARow()
         whoIsNext = whoStarts
-        started = true
         startTimer()
     }
 
     @OptIn(ExperimentalTime::class)
     private fun startTimer() {
+        timerJob?.cancel()
+        started = true
         elapsedSeconds = 0
         timerState.value = TimerViewModel()
 
-        viewModelScope.launch {
+        timerJob = viewModelScope.launch {
             while (started && isActive) {
                 delay(1.seconds)
                 elapsedSeconds++
@@ -85,6 +85,9 @@ open class MainViewController {
     }
 
     fun playPiece(column: Int) {
+        if (!started) {
+            startTimer()
+        }
         gameBoard.put(whoIsNext, column)
         whoIsNext = whoIsNext.next()
     }

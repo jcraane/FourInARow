@@ -3,9 +3,7 @@ package dev.jamiecraane.ui.components
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -31,12 +29,37 @@ fun Board(
     println("pieces = $playedPieces")
 
     BoxWithConstraints {
-        val numPieces by derivedStateOf { numRows * numColumns }
-//    todo render the board, we might need two layers for background effect
-//        todo or use a canvas and draw ourselves
+        Row(
+            modifier = Modifier
+                .background(Color(0xFF258EFF), RoundedCornerShape(8.dp))
+        ) {
+            repeat(numColumns) { columnIndex ->
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+//                    todo move logic to viewmodel
+                    val piecesForColumn = playedPieces.filter { it.column == columnIndex }
+                    val emptyPieces = numRows - piecesForColumn.size
 
-        Background(numColumns, numPieces, onClickListener)
+                    repeat(emptyPieces) {
+                        EmptyCell(
+                            modifier = Modifier.wrapContentSize().padding(8.dp),
+                            column = columnIndex,
+                            onClickListener = onClickListener,
+                        )
+                    }
 
+                    piecesForColumn.reversed().forEach {
+                        Piece(
+                            modifier = Modifier.wrapContentSize().padding(8.dp),
+                            color = it.color,
+                            column = columnIndex,
+                            onClickListener = onClickListener,
+                        )
+                    }
+                }
+            }
+        }
+
+/*
         LazyVerticalGrid(
             modifier = Modifier
                 .background(Color(0xFF258EFF), RoundedCornerShape(8.dp)),
@@ -50,16 +73,9 @@ fun Board(
                     onClickListener = onClickListener,
                 )
             }
-            /*items(numPieces) { index ->
-                // Since we support clicking on any piece, we need to remember the column the piece belongs to to know at which column a new
-                // piece should be inserted.
-                TransparentCell(
-                    modifier = Modifier.wrapContentSize().padding(8.dp),
-                    column = index % numColumns,
-                    onClickListener = onClickListener,
-                )
-            }*/
+
         }
+*/
     }
 }
 
