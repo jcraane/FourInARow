@@ -1,3 +1,3 @@
-Compose desktop app for rendering simple graphs using coordinate input or simple mathematical functions.
+Compose desktop app for implementing the famous 4 in a row game.
 
 ![Alt text](images/sample.png?raw=true "Sample image")
