@@ -35,6 +35,9 @@ private fun SettingsDialogContent(
         title = {
             Text(text = "Settings")
         },
+        text = {
+//            todo implement
+        },
         buttons = {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ActionButton(label = "Save", onClick = {
