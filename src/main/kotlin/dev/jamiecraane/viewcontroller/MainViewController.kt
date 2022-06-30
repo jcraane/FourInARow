@@ -21,22 +21,23 @@ open class MainViewController {
 
     private val playedPieces = mutableSetOf<PieceViewModel>()
     private val showSettings = MutableStateFlow(false)
-    private val timerState = MutableStateFlow(TimerViewModel("0s"))
 
     val mainScreenState: Flow<MainScreenViewModel> = combine(
-        gameBoard.gameStatusFlow, timerState, showSettings
-    ) { gameStatus, timerState, showSettings ->
+        gameBoard.gameStatusFlow, showSettings
+    ) { gameStatus, showSettings ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
             playedPieces.add(playedPiece)
         }
 
         MainScreenViewModel(
             playedPieces.toList(),
-            timerState,
             showSettings,
             winner = if (gameStatus?.winner != null) WinnerViewModel(name = gameStatus.winner.name) else null,
         )
     }
+
+    private val _timerState = MutableStateFlow(TimerViewModel("0s"))
+    val timerState:Flow<TimerViewModel> = _timerState
 
     private var started = false
     private var elapsedSeconds = 0
@@ -83,7 +84,7 @@ open class MainViewController {
             while (started && isActive) {
                 delay(1.seconds)
                 elapsedSeconds++
-                timerState.value = TimerViewModel("${elapsedSeconds}s")
+                _timerState.value = TimerViewModel("${elapsedSeconds}s")
             }
         }
     }
@@ -92,7 +93,7 @@ open class MainViewController {
         timerJob?.cancel()
         started = false
         elapsedSeconds = 0
-        timerState.value = TimerViewModel()
+        _timerState.value = TimerViewModel()
     }
 
     fun playPiece(column: Int) {

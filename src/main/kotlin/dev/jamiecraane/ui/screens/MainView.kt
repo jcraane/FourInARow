@@ -23,9 +23,10 @@ fun MainView(
     settingsViewController: SettingsViewController,
 ) {
     val mainScreenState by mainViewController.mainScreenState.collectAsState(MainScreenViewModel())
+    val timerState by mainViewController.timerState.collectAsState(TimerViewModel())
 
     MainViewContent(
-        timerState = mainScreenState.timerViewModel,
+        timerState = timerState,
         onNewGameClicked = { mainViewController.newGame() },
         onSettingsClicked = { mainViewController.onSettingsClicked() },
         onPieceClicked = { column -> mainViewController.playPiece(column) },
