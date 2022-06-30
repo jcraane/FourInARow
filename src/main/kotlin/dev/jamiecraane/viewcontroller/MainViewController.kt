@@ -50,8 +50,8 @@ open class MainViewController {
     }
 
     private fun PlayedPiece.mapToViewModel(): PieceViewModel = when (this.piece) {
-        Piece.YELLOW -> PieceViewModel(color = Color.Yellow, column, row)
-        Piece.RED -> PieceViewModel(color = Color.Red, column, row)
+        Piece.YELLOW -> PieceViewModel(color = Color(0xFFF8FF62), column, row)
+        Piece.RED -> PieceViewModel(color = Color(0xFFFF7E6C), column, row)
     }
 
     /**
