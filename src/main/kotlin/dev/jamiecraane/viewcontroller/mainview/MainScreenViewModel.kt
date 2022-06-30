@@ -1,4 +1,4 @@
-package dev.jamiecraane.viewcontroller
+package dev.jamiecraane.viewcontroller.mainview
 
 data class MainScreenViewModel(
     val playedPieces: List<PieceViewModel> = emptyList(),

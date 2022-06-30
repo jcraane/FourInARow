@@ -9,8 +9,8 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import dev.jamiecraane.ui.screens.MainView
 import dev.jamiecraane.ui.theme.FourInARowTheme
-import dev.jamiecraane.viewcontroller.MainViewController
-import dev.jamiecraane.viewcontroller.SettingsViewController
+import dev.jamiecraane.viewcontroller.mainview.MainViewController
+import dev.jamiecraane.viewcontroller.settings.SettingsViewController
 
 @Composable
 @Preview

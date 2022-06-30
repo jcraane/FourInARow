@@ -1,4 +1,4 @@
-package dev.jamiecraane.viewcontroller
+package dev.jamiecraane.viewcontroller.settings
 
 import kotlinx.coroutines.CoroutineScope
 

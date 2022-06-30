@@ -6,15 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dev.jamiecraane.viewcontroller.PieceViewModel
+import dev.jamiecraane.viewcontroller.mainview.PieceViewModel
 import dev.jamiecraane.ui.theme.FourInARowTheme
 
 @OptIn(ExperimentalFoundationApi::class)

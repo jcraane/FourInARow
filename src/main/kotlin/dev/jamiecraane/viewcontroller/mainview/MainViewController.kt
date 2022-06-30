@@ -1,4 +1,4 @@
-package dev.jamiecraane.viewcontroller
+package dev.jamiecraane.viewcontroller.mainview
 
 import androidx.compose.ui.graphics.Color
 import dev.jamiecraane.domain.FourInARow

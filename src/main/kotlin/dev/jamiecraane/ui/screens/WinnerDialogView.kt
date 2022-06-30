@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.jamiecraane.ui.components.core.ActionButton
 import dev.jamiecraane.ui.theme.FourInARowTheme
-import dev.jamiecraane.viewcontroller.MainViewController
-import dev.jamiecraane.viewcontroller.WinnerViewModel
+import dev.jamiecraane.viewcontroller.mainview.MainViewController
+import dev.jamiecraane.viewcontroller.mainview.WinnerViewModel
 
 @Composable
 fun WinnerDialogView(

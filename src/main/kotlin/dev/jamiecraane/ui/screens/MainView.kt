@@ -10,11 +10,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.jamiecraane.domain.FourInARow
-import dev.jamiecraane.domain.Piece
 import dev.jamiecraane.ui.components.ActionStrip
 import dev.jamiecraane.ui.components.Board
 import dev.jamiecraane.ui.theme.FourInARowTheme
-import dev.jamiecraane.viewcontroller.*
+import dev.jamiecraane.viewcontroller.mainview.MainScreenViewModel
+import dev.jamiecraane.viewcontroller.mainview.MainViewController
+import dev.jamiecraane.viewcontroller.mainview.PieceViewModel
+import dev.jamiecraane.viewcontroller.mainview.TimerViewModel
+import dev.jamiecraane.viewcontroller.settings.SettingsViewController
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
