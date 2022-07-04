@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
+import dev.jamiecraane.persistence.InMemorySettingsRepository
 import dev.jamiecraane.ui.screens.MainView
 import dev.jamiecraane.ui.theme.FourInARowTheme
 import dev.jamiecraane.viewcontroller.mainview.MainViewController
@@ -16,10 +17,11 @@ import dev.jamiecraane.viewcontroller.settings.SettingsViewController
 @Preview
 fun App() {
     val scope = rememberCoroutineScope()
-    val mainViewController = MainViewController().apply {
+    val settingsRepository = InMemorySettingsRepository()
+    val mainViewController = MainViewController(settingsRepository).apply {
         init(scope)
     }
-    val settingsViewController = SettingsViewController().apply {
+    val settingsViewController = SettingsViewController(settingsRepository).apply {
         init(scope)
     }
 

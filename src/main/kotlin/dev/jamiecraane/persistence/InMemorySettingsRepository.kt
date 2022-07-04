@@ -3,11 +3,11 @@ package dev.jamiecraane.persistence
 import dev.jamiecraane.domain.Settings
 
 class InMemorySettingsRepository : SettingsRepository {
+    private var settings: Settings = Settings()
+
     override fun saveSettings(settings: Settings) {
-        TODO("Not yet implemented")
+        this.settings = settings
     }
 
-    override fun retrieveSettings(): Settings {
-        TODO("Not yet implemented")
-    }
+    override fun retrieveSettings() = settings
 }

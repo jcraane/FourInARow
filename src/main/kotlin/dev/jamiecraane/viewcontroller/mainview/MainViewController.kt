@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import dev.jamiecraane.domain.FourInARow
 import dev.jamiecraane.domain.Piece
 import dev.jamiecraane.domain.PlayedPiece
+import dev.jamiecraane.persistence.SettingsRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.seconds
@@ -14,17 +15,21 @@ import kotlin.time.ExperimentalTime
  *
  * Delegates to @see [FourInARow] which implements the actual game logic.
  */
-open class MainViewController {
+open class MainViewController(
+    private val settingsRepository: SettingsRepository,
+) {
     private lateinit var viewModelScope: CoroutineScope
 
     private val gameBoard = FourInARow()
 
     private val playedPieces = mutableSetOf<PieceViewModel>()
     private val showSettings = MutableStateFlow(false)
+    // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
+    private val whoIsNext = MutableStateFlow(Piece.RED)
 
     val mainScreenState: Flow<MainScreenViewModel> = combine(
-        gameBoard.gameStatusFlow, showSettings
-    ) { gameStatus, showSettings ->
+        gameBoard.gameStatusFlow, showSettings, whoIsNext
+    ) { gameStatus, showSettings, whoIsNext ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
             playedPieces.add(playedPiece)
         }
@@ -42,9 +47,6 @@ open class MainViewController {
     private var started = false
     private var elapsedSeconds = 0
     private var timerJob: Job? = null
-
-    // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
-    private var whoIsNext: Piece = Piece.RED
 
     fun init(viewModelScope: CoroutineScope) {
         this.viewModelScope = viewModelScope
@@ -64,7 +66,7 @@ open class MainViewController {
         resetTimer()
         this.gameBoard.newGame()
         playedPieces.clear()
-        whoIsNext = whoStarts
+        whoIsNext.value = whoStarts
         startTimer()
     }
 
@@ -72,7 +74,7 @@ open class MainViewController {
         resetTimer()
         this.gameBoard.newGame()
         playedPieces.clear()
-        whoIsNext = whoStarts
+        this.whoIsNext.value = whoStarts
     }
 
     @OptIn(ExperimentalTime::class)
@@ -100,8 +102,8 @@ open class MainViewController {
         if (!started) {
             startTimer()
         }
-        gameBoard.put(whoIsNext, column)
-        whoIsNext = whoIsNext.next()
+        gameBoard.put(whoIsNext.value, column)
+        whoIsNext.value = whoIsNext.value.next()
     }
 
     fun onSettingsClicked() {
