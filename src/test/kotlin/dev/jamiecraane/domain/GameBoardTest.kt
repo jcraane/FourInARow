@@ -1,6 +1,10 @@
 package dev.jamiecraane.domain
 
 import app.cash.turbine.test
+import dev.jamiecraane.fourinarow.gameboard.domain.FourInARow
+import dev.jamiecraane.fourinarow.gameboard.domain.GameStatus
+import dev.jamiecraane.fourinarow.gameboard.domain.Piece
+import dev.jamiecraane.fourinarow.gameboard.domain.PlayedPiece
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest

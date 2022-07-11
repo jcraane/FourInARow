@@ -1,5 +1,7 @@
 package dev.jamiecraane.domain
 
+import dev.jamiecraane.fourinarow.gameboard.domain.BruteForceWinnerDecider
+import dev.jamiecraane.fourinarow.gameboard.domain.Piece
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
