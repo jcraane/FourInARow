@@ -13,10 +13,12 @@ import dev.jamiecraane.fourinarow.gameboard.domain.FourInARow
 import dev.jamiecraane.fourinarow.common.ui.components.ActionStrip
 import dev.jamiecraane.fourinarow.common.ui.components.Board
 import dev.jamiecraane.fourinarow.common.ui.theme.FourInARowTheme
+import dev.jamiecraane.fourinarow.gameboard.ui.NewGameDialogView
 import dev.jamiecraane.fourinarow.gameboard.viewcontroller.MainScreenViewModel
 import dev.jamiecraane.fourinarow.gameboard.viewcontroller.MainViewController
 import dev.jamiecraane.fourinarow.gameboard.viewcontroller.PieceViewModel
 import dev.jamiecraane.fourinarow.gameboard.viewcontroller.TimerViewModel
+import dev.jamiecraane.fourinarow.main
 import dev.jamiecraane.fourinarow.settings.viewcontroller.SettingsViewController
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -30,7 +32,10 @@ fun GameView(
 
     MainViewContent(
         timerState = timerState,
-        onNewGameClicked = { mainViewController.newGame() },
+        onNewGameClicked = {
+//            mainViewController.startNewGame()
+            mainViewController.onNewGameClicked()
+        },
         onSettingsClicked = { mainViewController.onSettingsClicked() },
         onPieceClicked = { column -> mainViewController.playPiece(column) },
         playedPieces = mainScreenState.playedPieces,
@@ -42,6 +47,10 @@ fun GameView(
 
     mainScreenState.winner?.let {
         WinnerDialogView(it, mainViewController)
+    }
+
+    if (mainScreenState.showNewGame) {
+        NewGameDialogView(mainViewController)
     }
 }
 

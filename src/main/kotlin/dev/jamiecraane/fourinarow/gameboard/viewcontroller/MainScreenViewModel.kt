@@ -5,6 +5,7 @@ data class MainScreenViewModel(
     val showSettings: Boolean = false,
     val winner: WinnerViewModel? = null,
     val whoIsNext: WhoIsNext? = null,
+    val showNewGame: Boolean = false,
 )
 
 data class WhoIsNext(

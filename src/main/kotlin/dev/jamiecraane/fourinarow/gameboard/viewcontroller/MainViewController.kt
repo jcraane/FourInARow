@@ -24,13 +24,14 @@ open class MainViewController(
 
     private val playedPieces = mutableSetOf<PieceViewModel>()
     private val showSettings = MutableStateFlow(false)
+    private val showNewGameDialog = MutableStateFlow(false)
 
     // Which piece to put in the game for the next move (switches between pieces because on every turn the other piece is played).
     private val whoIsNext = MutableStateFlow(Piece.RED)
 
     val mainScreenState: Flow<MainScreenViewModel> = combine(
-        gameBoard.gameStatusFlow, showSettings, whoIsNext
-    ) { gameStatus, showSettings, whoIsNext ->
+        gameBoard.gameStatusFlow, showSettings, whoIsNext, showNewGameDialog
+    ) { gameStatus, showSettings, whoIsNext, showNewGame ->
         gameStatus?.playedPiece?.mapToViewModel()?.let { playedPiece ->
             playedPieces.add(playedPiece)
         }
@@ -42,7 +43,8 @@ open class MainViewController(
             whoIsNext = WhoIsNext(
                 piece = PieceViewModel(whoIsNext.color, 0, 0),
                 name = "",
-            )
+            ),
+            showNewGame = showNewGame,
         )
     }
 
@@ -64,7 +66,8 @@ open class MainViewController(
      *
      * @param whoStarts The color of the piece who starts the game.
      */
-    fun newGame(whoStarts: Piece = Piece.RED) {
+    fun startNewGame(whoStarts: Piece = Piece.RED) {
+        showNewGameDialog.value = false
         resetTimer()
         this.gameBoard.newGame()
         playedPieces.clear()
@@ -114,5 +117,13 @@ open class MainViewController(
 
     fun closeSettingsDialog() {
         showSettings.value = false
+    }
+
+    fun onNewGameClicked() {
+        showNewGameDialog.value = true
+    }
+
+    fun closeNewGameDialog() {
+        showNewGameDialog.value = false
     }
 }
