@@ -16,6 +16,9 @@ import dev.jamiecraane.fourinarow.common.ui.theme.FourInARowTheme
 import dev.jamiecraane.fourinarow.gameboard.viewcontroller.MainViewController
 import dev.jamiecraane.fourinarow.gameboard.viewcontroller.WinnerViewModel
 
+/**
+ * Displayed when there is a winner or the game has ended with a draw.
+ */
 @Composable
 fun WinnerDialogView(
     winner: WinnerViewModel,

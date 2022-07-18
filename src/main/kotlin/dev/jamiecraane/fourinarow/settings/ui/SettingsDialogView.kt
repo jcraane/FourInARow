@@ -52,6 +52,7 @@ private fun SettingsDialogContent(
             Text(text = "Settings")
         },
         text = {
+//            todo add color with which the players will play here instead of new game
             Column() {
                 Row() {
                     Text(text = "Player one", modifier = Modifier.defaultMinSize(140.dp))

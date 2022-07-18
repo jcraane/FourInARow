@@ -50,7 +50,7 @@ fun GameView(
     }
 
     if (mainScreenState.showNewGame) {
-        NewGameDialogView(mainViewController)
+        NewGameDialogView(mainViewController, settingsViewController)
     }
 }
 

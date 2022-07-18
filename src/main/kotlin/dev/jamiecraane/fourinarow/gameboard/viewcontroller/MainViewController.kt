@@ -48,6 +48,7 @@ open class MainViewController(
         )
     }
 
+    // Timestate is a separate flow because we do not want to update the complete main state on each timertick (the above combine function)
     private val _timerState = MutableStateFlow(TimerViewModel("0s"))
     val timerState: Flow<TimerViewModel> = _timerState
 
