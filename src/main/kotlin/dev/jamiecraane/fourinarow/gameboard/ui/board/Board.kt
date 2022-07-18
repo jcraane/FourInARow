@@ -23,8 +23,6 @@ fun Board(
     playedPieces: List<PieceViewModel>,
     onClickListener: (column: Int) -> Unit,
 ) {
-    println("pieces = $playedPieces")
-
     BoxWithConstraints {
         Row(
             modifier = Modifier
@@ -55,24 +53,6 @@ fun Board(
                 }
             }
         }
-
-/*
-        LazyVerticalGrid(
-            modifier = Modifier
-                .background(Color(0xFF258EFF), RoundedCornerShape(8.dp)),
-            cells = GridCells.Fixed(numColumns),
-        ) {
-            itemsIndexed(playedPieces) { index, item ->
-                Piece(
-                    modifier = Modifier.wrapContentSize().padding(8.dp),
-                    color = item.color,
-                    column = index % numColumns,
-                    onClickListener = onClickListener,
-                )
-            }
-
-        }
-*/
     }
 }
 
@@ -85,8 +65,8 @@ private fun Background(numColumns: Int, numPieces: Int, onClickListener: (column
         cells = GridCells.Fixed(numColumns),
     ) {
         items(numPieces) { index ->
-            // Since we support clicking on any piece, we need to remember the column the piece belongs to to know at which column a new
-            // piece should be inserted.
+            // Since we support clicking on any piece, we need to remember the column the piece belongs to, so we know at which column a
+            // new piece should be inserted.
             EmptyCell(
                 modifier = Modifier.wrapContentSize().padding(8.dp),
                 column = index % numColumns,

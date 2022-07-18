@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 import dev.jamiecraane.fourinarow.common.ui.theme.FourInARowTheme
 import dev.jamiecraane.fourinarow.extensions.color
 import dev.jamiecraane.fourinarow.gameboard.domain.Piece
@@ -65,6 +66,7 @@ private fun PieceView(
         Box(
             modifier = Modifier.size(48.dp)
                 .background(color = piece.color, shape = RoundedCornerShape(24.dp))
+                .clip(RoundedCornerShape(24.dp))
                 .clickable(
                     remember { MutableInteractionSource() },
                     rememberRipple(bounded = true),
