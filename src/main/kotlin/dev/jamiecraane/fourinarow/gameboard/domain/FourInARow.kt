@@ -26,6 +26,12 @@ class FourInARow(private val winnerDecider: WinnerDecider = BruteForceWinnerDeci
      */
     fun put(piece: Piece, column: Int) {
         var rowIndex = BOTTOM_ROW_INDEX // Start at bottom
+
+//        If the column is full, don't do anything
+        if (board[0][column] != EMPTY) {
+            return
+        }
+
         while (board[rowIndex][column] != EMPTY) {
             rowIndex--
         }

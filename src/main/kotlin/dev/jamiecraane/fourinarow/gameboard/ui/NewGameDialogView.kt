@@ -26,7 +26,9 @@ fun NewGameDialogView(
 ) {
     NewGameDialogContent(
         onCloseClicked = { mainViewController.closeNewGameDialog() },
-        onStartNewGameClicked = { mainViewController.startNewGame() },
+        onStartNewGameClicked = { playerOne, playerTwo ->
+            mainViewController.startNewGame(playerOne, playerTwo)
+        },
         settings = settingsViewController.retrieveSettings(),
     )
 }
@@ -35,7 +37,7 @@ fun NewGameDialogView(
 @Composable
 private fun NewGameDialogContent(
     settings: Settings,
-    onStartNewGameClicked: () -> Unit,
+    onStartNewGameClicked: (playerOne: Piece, playerTwo: Piece) -> Unit,
     onCloseClicked: () -> Unit,
 ) {
     var piecePlayerOne by remember { mutableStateOf(Piece.YELLOW) }
@@ -76,7 +78,7 @@ private fun NewGameDialogContent(
         buttons = {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ActionButton(label = "Start", onClick = {
-                    onStartNewGameClicked()
+                    onStartNewGameClicked(piecePlayerOne, piecePlayerTwo)
                 })
                 ActionButton(label = "Cancel", onClick = {
                     onCloseClicked()
@@ -90,7 +92,7 @@ private fun NewGameDialogContent(
 @Preview
 private fun PlayerColorPickerPreview() {
     FourInARowTheme {
-//        PlayerPiecePicker()
+        PlayerPiecePicker(pieces = Piece.values().toList(), selectedPiece = Piece.YELLOW, {})
     }
 }
 
@@ -98,7 +100,7 @@ private fun PlayerColorPickerPreview() {
 @Preview
 private fun NewGameDialogContentPreview() {
     FourInARowTheme {
-        NewGameDialogContent(onStartNewGameClicked = {}, onCloseClicked = {}, settings = Settings())
+        NewGameDialogContent(onStartNewGameClicked = { playerOne, playerTwo -> }, onCloseClicked = {}, settings = Settings())
     }
 }
 

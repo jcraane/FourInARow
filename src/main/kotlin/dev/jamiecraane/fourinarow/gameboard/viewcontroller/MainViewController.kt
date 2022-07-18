@@ -67,12 +67,14 @@ open class MainViewController(
      *
      * @param whoStarts The color of the piece who starts the game.
      */
-    fun startNewGame(whoStarts: Piece = Piece.RED) {
+    fun startNewGame(
+        playerOne: Piece,
+        playerTwo: Piece,) {
         showNewGameDialog.value = false
         resetTimer()
         this.gameBoard.newGame()
         playedPieces.clear()
-        whoIsNext.value = whoStarts
+        whoIsNext.value = playerOne
         startTimer()
     }
 
