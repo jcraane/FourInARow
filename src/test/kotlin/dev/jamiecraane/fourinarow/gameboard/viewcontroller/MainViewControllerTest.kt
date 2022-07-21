@@ -27,17 +27,14 @@ class MainViewControllerTest {
 
     private val settings = Settings(playerOne = "John Smith", playerTwo = "Jane Doe")
 
-    private val dispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        Dispatchers.setMain(dispatcher)
         every { settingsRepository.retrieveSettings() } returns settings
     }
 
     @Test
-    fun startNewGame() = runTest(dispatcher) {
+    fun startNewGame() = runTest {
         val mainViewController = getMainViewController()
         mainViewController.startNewGame(Piece.RED, Piece.YELLOW)
 
