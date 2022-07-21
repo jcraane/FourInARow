@@ -11,6 +11,7 @@ plugins {
 
 group = "com.example"
 version = "1.0-SNAPSHOT"
+
 val mockitoVersion = "4.6.1"
 
 repositories {
@@ -21,6 +22,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("io.insert-koin:koin-core:3.2.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testImplementation("app.cash.turbine:turbine:0.8.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3")

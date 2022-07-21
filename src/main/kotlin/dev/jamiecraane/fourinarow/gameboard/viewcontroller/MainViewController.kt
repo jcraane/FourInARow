@@ -17,9 +17,8 @@ import kotlin.time.ExperimentalTime
  */
 open class MainViewController(
     private val settingsRepository: SettingsRepository,
+    private val viewModelScope: CoroutineScope,
 ) {
-    private lateinit var viewModelScope: CoroutineScope
-
     private val gameBoard = FourInARow()
 
     private val playedPieces = mutableSetOf<PieceViewModel>()
@@ -72,10 +71,6 @@ open class MainViewController(
         playerPieceMap[playerTwo] = settings.playerTwo
     }
 
-    fun init(viewModelScope: CoroutineScope) {
-        this.viewModelScope = viewModelScope
-    }
-
     fun piecesForPlayer(): Pair<Piece, Piece> {
         val settings = settingsRepository.retrieveSettings()
         val reversed = playerPieceMap.entries.associateBy({ it.value }) { it.key }
@@ -89,10 +84,7 @@ open class MainViewController(
      *
      * @param whoStarts The color of the piece who starts the game.
      */
-    fun startNewGame(
-        playerOne: Piece,
-        playerTwo: Piece,
-    ) {
+    fun startNewGame(playerOne: Piece, playerTwo: Piece) {
         showNewGameDialog.value = false
         initPiecesForPlayer(playerOne, playerTwo)
         resetTimer()

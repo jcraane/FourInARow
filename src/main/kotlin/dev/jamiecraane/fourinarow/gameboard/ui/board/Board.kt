@@ -56,26 +56,6 @@ fun Board(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun Background(numColumns: Int, numPieces: Int, onClickListener: (column: Int) -> Unit) {
-    LazyVerticalGrid(
-        modifier = Modifier
-            .background(Color(0xFF258EFF), RoundedCornerShape(8.dp)),
-        cells = GridCells.Fixed(numColumns),
-    ) {
-        items(numPieces) { index ->
-            // Since we support clicking on any piece, we need to remember the column the piece belongs to, so we know at which column a
-            // new piece should be inserted.
-            EmptyCell(
-                modifier = Modifier.wrapContentSize().padding(8.dp),
-                column = index % numColumns,
-                onClickListener = onClickListener,
-            )
-        }
-    }
-}
-
 @Composable
 @Preview
 private fun BoardPreview() {

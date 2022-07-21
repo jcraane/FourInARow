@@ -32,10 +32,7 @@ fun GameView(
 
     MainViewContent(
         timerState = timerState,
-        onNewGameClicked = {
-//            mainViewController.startNewGame()
-            mainViewController.onNewGameClicked()
-        },
+        onNewGameClicked = { mainViewController.onNewGameClicked() },
         onSettingsClicked = { mainViewController.onSettingsClicked() },
         onPieceClicked = { column -> mainViewController.playPiece(column) },
         playedPieces = mainScreenState.playedPieces,
