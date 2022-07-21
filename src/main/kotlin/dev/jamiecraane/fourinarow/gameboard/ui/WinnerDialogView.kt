@@ -1,10 +1,7 @@
 package dev.jamiecraane.fourinarow.ui.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -39,7 +36,7 @@ private fun WinnerDialogContent(
     onCloseClicked: () -> Unit,
 ) {
     AlertDialog(
-        modifier = Modifier.padding(12.dp),
+        modifier = Modifier.padding(12.dp).defaultMinSize(300.dp, 140.dp),
         onDismissRequest = { onCloseClicked() },
         title = {
             Column {

@@ -39,10 +39,10 @@ open class MainViewController(
         MainScreenViewModel(
             playedPieces.toList(),
             showSettings,
-            winner = if (gameStatus?.winner != null) WinnerViewModel(name = gameStatus.winner.name) else null,
+            winner = if (gameStatus?.winner != null) WinnerViewModel(name = getPlayerName(`for` = gameStatus.winner)) else null,
             whoIsNext = WhoIsNext(
                 piece = whoIsNext,
-                name = playerPieceMap[whoIsNext] ?: "",
+                name = getPlayerName(`for` = whoIsNext),
             ),
             showNewGame = showNewGame,
         )
@@ -65,10 +65,11 @@ open class MainViewController(
         initPiecesForPlayer(Piece.YELLOW, Piece.RED)
     }
 
+    private fun getPlayerName(`for`: Piece): String = playerPieceMap[`for`] ?: `for`.name
     private fun initPiecesForPlayer(playerOne: Piece, playerTwo: Piece) {
         val settings = settingsRepository.retrieveSettings()
         playerPieceMap[playerOne] = settings.playerOne
-        playerPieceMap[playerOne] = settings.playerTwo
+        playerPieceMap[playerTwo] = settings.playerTwo
     }
 
     fun init(viewModelScope: CoroutineScope) {
@@ -127,6 +128,10 @@ open class MainViewController(
         started = false
         elapsedSeconds = 0
         _timerState.value = TimerViewModel()
+    }
+
+    internal fun stopTimer() {
+        resetTimer()
     }
 
     fun playPiece(column: Int) {
