@@ -1,6 +1,9 @@
 package dev.jamiecraane.fourinarow.gameboard.viewcontroller
 
+import androidx.compose.ui.graphics.Color
+import app.cash.turbine.FlowTurbine
 import app.cash.turbine.test
+import dev.jamiecraane.fourinarow.extensions.color
 import dev.jamiecraane.fourinarow.gameboard.domain.Piece
 import dev.jamiecraane.fourinarow.settings.domain.Settings
 import dev.jamiecraane.fourinarow.settings.repository.SettingsRepository
@@ -22,23 +25,20 @@ class MainViewControllerTest {
     @MockK
     lateinit var settingsRepository: SettingsRepository
 
+    private val settings = Settings(playerOne = "John Smith", playerTwo = "Jane Doe")
+
     private val dispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         Dispatchers.setMain(dispatcher)
+        every { settingsRepository.retrieveSettings() } returns settings
     }
 
     @Test
     fun startNewGame() = runTest(dispatcher) {
-        val settings = Settings(playerOne = "John Smith", playerTwo = "Jane Doe")
-        every { settingsRepository.retrieveSettings() } returns settings
-
-        val mainViewController = MainViewController(settingsRepository).apply {
-            init(this@runTest)
-        }
-
+        val mainViewController = getMainViewController()
         mainViewController.startNewGame(Piece.RED, Piece.YELLOW)
 
         launch {
@@ -51,8 +51,41 @@ class MainViewControllerTest {
                 assertEquals(settings.playerOne, item.whoIsNext?.name)
                 assertEquals(Piece.RED, item.whoIsNext?.piece)
 
-                mainViewController.stopTimer()
-                cancelAndIgnoreRemainingEvents()
+                cancelAndCleanup(mainViewController)
+            }
+        }
+    }
+
+    private fun TestScope.getMainViewController() =
+        MainViewController(settingsRepository).apply {
+            init(this@getMainViewController)
+        }
+
+
+    private suspend fun FlowTurbine<MainScreenViewModel>.cancelAndCleanup(
+        mainViewController: MainViewController,
+    ) {
+        mainViewController.stopTimer()
+        cancelAndIgnoreRemainingEvents()
+    }
+
+    @Test
+    fun playPiece() = runTest {
+        val mainViewController = getMainViewController()
+        mainViewController.startNewGame(Piece.RED, Piece.YELLOW)
+        mainViewController.playPiece(3)
+
+        launch {
+            mainViewController.mainScreenState.test {
+                val item = awaitItem()
+                assertFalse(item.showSettings)
+                assertFalse(item.showNewGame)
+                assertNull(item.winner)
+                assertEquals(PieceViewModel(Piece.RED.color, 3, 5), item.playedPieces.first())
+                assertEquals(settings.playerTwo, item.whoIsNext?.name)
+                assertEquals(Piece.YELLOW, item.whoIsNext?.piece)
+
+                cancelAndCleanup(mainViewController)
             }
         }
     }
