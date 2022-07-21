@@ -29,7 +29,7 @@ fun App(mainViewController: MainViewController, settingsViewController: Settings
     }
 }
 
-fun main(): Unit {
+fun main() {
     KoinApp().app()
 }
 
