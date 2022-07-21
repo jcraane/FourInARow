@@ -24,12 +24,15 @@ fun NewGameDialogView(
     mainViewController: MainViewController,
     settingsViewController: SettingsViewController,
 ) {
+    val piecesForPlayer = mainViewController.piecesForPlayer()
     NewGameDialogContent(
+        settings = settingsViewController.retrieveSettings(),
+        initialPiecePlayerOne = piecesForPlayer.first,
+        initialPiecePlayerTwo = piecesForPlayer.second,
         onCloseClicked = { mainViewController.closeNewGameDialog() },
         onStartNewGameClicked = { playerOne, playerTwo ->
             mainViewController.startNewGame(playerOne, playerTwo)
         },
-        settings = settingsViewController.retrieveSettings(),
     )
 }
 
@@ -37,11 +40,13 @@ fun NewGameDialogView(
 @Composable
 private fun NewGameDialogContent(
     settings: Settings,
+    initialPiecePlayerOne: Piece,
+    initialPiecePlayerTwo: Piece,
     onStartNewGameClicked: (playerOne: Piece, playerTwo: Piece) -> Unit,
     onCloseClicked: () -> Unit,
 ) {
-    var piecePlayerOne by remember { mutableStateOf(Piece.YELLOW) }
-    var piecePlayerTwo by remember { mutableStateOf(Piece.RED) }
+    var piecePlayerOne by remember { mutableStateOf(initialPiecePlayerOne) }
+    var piecePlayerTwo by remember { mutableStateOf(initialPiecePlayerTwo) }
 
     AlertDialog(
         modifier = Modifier.padding(12.dp).width(350.dp),
@@ -100,7 +105,9 @@ private fun PlayerColorPickerPreview() {
 @Preview
 private fun NewGameDialogContentPreview() {
     FourInARowTheme {
-        NewGameDialogContent(onStartNewGameClicked = { playerOne, playerTwo -> }, onCloseClicked = {}, settings = Settings())
+        NewGameDialogContent(onStartNewGameClicked = { playerOne, playerTwo -> }, onCloseClicked = {}, settings = Settings(),
+            initialPiecePlayerTwo = Piece.YELLOW, initialPiecePlayerOne = Piece.RED
+        )
     }
 }
 

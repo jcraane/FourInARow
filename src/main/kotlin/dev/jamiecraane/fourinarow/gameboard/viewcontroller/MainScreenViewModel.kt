@@ -1,5 +1,7 @@
 package dev.jamiecraane.fourinarow.gameboard.viewcontroller
 
+import dev.jamiecraane.fourinarow.gameboard.domain.Piece
+
 data class MainScreenViewModel(
     val playedPieces: List<PieceViewModel> = emptyList(),
     val showSettings: Boolean = false,
@@ -9,6 +11,6 @@ data class MainScreenViewModel(
 )
 
 data class WhoIsNext(
-    val piece: PieceViewModel, // We re-use PieceViewModel even though we do not need column and row.
+    val piece: Piece, // We re-use PieceViewModel even though we do not need column and row.
     val name: String,
 )
